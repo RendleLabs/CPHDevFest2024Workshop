@@ -1,5 +1,7 @@
 ﻿using TrafficCamera.Generator;
 
+const int lines = 10_000_000;
+
 using var writer = File.CreateText("traffic.txt");
 
 var licensePlates = Enumerable.Range(0, 10_000)
@@ -11,13 +13,17 @@ var roads = Enumerable.Range(1, 500)
     .Concat(Enumerable.Range(1, 100).Select(n => $"M{n}"))
     .ToArray();
 
-for (int i = 0; i < 10_000_000; i++)
+string[] colors = ["Red", "Green", "Blue", "Black", "White", "Grey", "Silver", "Other"];
+
+for (int i = 0; i < lines; i++)
 {
     writer.Write(RandomTime());
     writer.Write(';');
     writer.Write(Random.Shared.Take(roads));
     writer.Write(';');
     writer.Write(Random.Shared.Take(licensePlates));
+    writer.Write(';');
+    writer.Write(Random.Shared.Take(colors));
     writer.Write(';');
     writer.Write(RandomSpeed());
     writer.Write('\n');
