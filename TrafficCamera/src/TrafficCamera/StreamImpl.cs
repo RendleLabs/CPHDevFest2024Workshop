@@ -24,13 +24,15 @@ public class StreamImpl
 
         int outerLoop = 0;
         int linesRead = 0;
+        
+        Span<Range> ranges = stackalloc Range[5];
 
         while (read > 0)
         {
             start:
             Console.WriteLine($"Outer loop {++outerLoop}");
             var span = buffer.AsSpan(0, read);
-            
+                
             while (span.Length > 0)
             {
                 #if(DEBUG)
@@ -51,20 +53,11 @@ public class StreamImpl
 
                 ++linesRead;
 
-                int sc = span.IndexOf((byte)';');
-                var time = span.Slice(0, sc);
-                span = span.Slice(sc + 1);
-                sc = span.IndexOf((byte)';');
-                var road = span.Slice(0, sc);
-                span = span.Slice(sc + 1);
-                sc = span.IndexOf((byte)';');
-                var licensePlate = span.Slice(0, sc);
-                span = span.Slice(sc + 1);
-                sc = span.IndexOf((byte)';');
-                var color = span.Slice(0, sc);
-                span = span.Slice(sc + 1);
-                newline = span.IndexOf((byte)'\n');
-                var speed = float.Parse(span.Slice(0, newline));
+                span.Slice(0, newline).Split(ranges, (byte)';');
+
+                var road = span[ranges[1]];
+                var licensePlate = span[ranges[2]];
+                var speed = float.Parse(span[ranges[4]]);
 
                 var key = Encoding.UTF8.GetString(road);
                 if (!aggregate.TryGetValue(key, out var accumulator))
