@@ -1,6 +1,6 @@
 ﻿using TrafficCamera.Generator;
 
-const int lines = 1_000;
+const int lines = 10_000_000;
 
 using var writer = File.CreateText("traffic.txt");
 
