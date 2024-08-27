@@ -90,6 +90,7 @@ public class ThreadedImpl
 
                 var road = span[ranges[1]];
                 var licensePlate = span[ranges[2]];
+                var color = span[ranges[3]];
                 var speed = IntParser.Parse(span[ranges[4]]);
 
                 var key = Key(road);
@@ -98,7 +99,7 @@ public class ThreadedImpl
                     _accumulators[key] = accumulator = new IntAccumulator(Encoding.UTF8.GetString(road));
                 }
 
-                accumulator.Record(speed, licensePlate);
+                accumulator.Record(speed, licensePlate, Colors.Parse(color));
 
                 span = span.Slice(newline + 1);
             }

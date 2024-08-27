@@ -1,9 +1,20 @@
+using System.Numerics;
+using System.Runtime.CompilerServices;
+using System.Runtime.Intrinsics;
 using System.Text;
 
 namespace TrafficCamera.Shared;
 
+[InlineArray(8)]
+public struct ColorArray
+{
+    private int _element0;
+}
+
 public class IntAccumulator
 {
+    private ColorArray _colors = new();
+    
     public string Road { get; }
     private long _total;
     private int _count;
@@ -11,13 +22,29 @@ public class IntAccumulator
     private string _slowestLicensePlate = string.Empty;
     private int _fastest = int.MinValue;
     private string _fastestLicensePlate = string.Empty;
-
+    
     public IntAccumulator(string road)
     {
+        ColorArray colorArray = new ColorArray();
+        
+        colorArray[0] = 1;
+        
         Road = road;
     }
 
-    public void Record(int value, ReadOnlySpan<byte> licensePlate)
+    public void GetColors(Span<int> colors)
+    {
+        var colorSpan = (ReadOnlySpan<int>)_colors;
+        colorSpan.CopyTo(colors);
+    }
+
+    public Vector256<int> GetColors()
+    {
+        var vector = new Vector<int>(_colors);
+        return vector.AsVector256();
+    }
+
+    public void Record(int value, ReadOnlySpan<byte> licensePlate, int color)
     {
         if (value < _slowest)
         {
@@ -32,6 +59,7 @@ public class IntAccumulator
         }
 
         _total += value;
+        _colors[color] += 1;
         ++_count;
     }
     
@@ -49,6 +77,11 @@ public class IntAccumulator
         {
             _fastest = other._fastest;
             _fastestLicensePlate = other._fastestLicensePlate;
+        }
+        
+        for (int i = 0; i < 8; i++)
+        {
+            _colors[i] += other._colors[i];
         }
     }
 

@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
+using System.Runtime.Intrinsics;
 using TrafficCamera;
+using TrafficCamera.Shared;
 
 var stopwatch = Stopwatch.StartNew();
 
@@ -8,16 +10,18 @@ var filePath = Path.GetFullPath(args[0]);
 var impl = new ThreadedImpl(filePath);
 var t = impl.Run();
 
-if (!t.IsCompleted)
-{
-    await t;
-}
+var total = Vector256.Create<int>(0);
 
 foreach (var (road, acc) in t.Result.OrderBy(p => p.Key))
 {
-    var mean = ((float)acc.Total / acc.Count) / 10f;
-    Console.WriteLine(
-        $"{road}: {acc.Slowest / 10f:F1} [{acc.SlowestLicensePlate}] / {mean:F1} / {acc.Fastest / 10f:F1} [{acc.FastestLicensePlate}]");
+    var colors = acc.GetColors();
+    // total = Vector256.Add(total, colors);
+    total += colors;
+}
+
+for (int i = 0; i < 8; i++)
+{
+    Console.WriteLine($"{Colors.Name(i)}: {total[i]}");
 }
 
 stopwatch.Stop();
