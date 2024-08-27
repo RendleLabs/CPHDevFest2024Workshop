@@ -1,13 +1,15 @@
+using System.Text;
+
 namespace TrafficCamera.Shared;
 
 public class IntAccumulator
 {
     public string Road { get; }
-    private float _total;
+    private long _total;
     private int _count;
-    private float _slowest = float.MaxValue;
+    private int _slowest = int.MaxValue;
     private string _slowestLicensePlate = string.Empty;
-    private float _fastest = float.MinValue;
+    private int _fastest = int.MinValue;
     private string _fastestLicensePlate = string.Empty;
 
     public IntAccumulator(string road)
@@ -15,18 +17,18 @@ public class IntAccumulator
         Road = road;
     }
 
-    public void Record(float value, string licensePlate)
+    public void Record(int value, ReadOnlySpan<byte> licensePlate)
     {
         if (value < _slowest)
         {
             _slowest = value;
-            _slowestLicensePlate = licensePlate;
+            _slowestLicensePlate = Encoding.UTF8.GetString(licensePlate);
         }
 
         if (value > _fastest)
         {
             _fastest = value;
-            _fastestLicensePlate = licensePlate;
+            _fastestLicensePlate = Encoding.UTF8.GetString(licensePlate);
         }
 
         _total += value;
@@ -50,9 +52,10 @@ public class IntAccumulator
         }
     }
 
-    public float Mean => _total / _count;
-    public float Slowest => _slowest;
+    public long Total => _total;
+    public long Count => _count;
+    public int Slowest => _slowest;
     public string SlowestLicensePlate => _slowestLicensePlate;
-    public float Fastest => _fastest;
+    public int Fastest => _fastest;
     public string FastestLicensePlate => _fastestLicensePlate;
 }

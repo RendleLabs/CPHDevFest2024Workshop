@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{775B2580-5231-4CCB-AF70-757C55804845}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RandomBenchmarks", "src\RandomBenchmarks\RandomBenchmarks.csproj", "{516FDBC9-90F3-4FBD-B5C7-B228F9E454DD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{516FDBC9-90F3-4FBD-B5C7-B228F9E454DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{516FDBC9-90F3-4FBD-B5C7-B228F9E454DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{516FDBC9-90F3-4FBD-B5C7-B228F9E454DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{516FDBC9-90F3-4FBD-B5C7-B228F9E454DD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{516FDBC9-90F3-4FBD-B5C7-B228F9E454DD} = {775B2580-5231-4CCB-AF70-757C55804845}
+	EndGlobalSection
+EndGlobal

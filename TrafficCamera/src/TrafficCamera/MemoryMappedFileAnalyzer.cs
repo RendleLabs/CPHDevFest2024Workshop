@@ -1,10 +1,10 @@
 ﻿using System.IO.MemoryMappedFiles;
 
-namespace OneBRC;
+namespace TrafficCamera;
 
 public static class MemoryMappedFileAnalyzer
 {
-    public static unsafe MemoryMappedFileChunk[] GetChunks(this MemoryMappedFile mmf, long size, int threadCount)
+    public static unsafe MemoryMappedFileChunk[] GetChunks(this MemoryMappedFile mmf, long size, int threadCount, byte delimiter)
     {
         var chunks = new MemoryMappedFileChunk[threadCount];
         
@@ -19,8 +19,8 @@ public static class MemoryMappedFileAnalyzer
         for (int i = 0; i < threadCount - 1; i++)
         {
             var span = new ReadOnlySpan<byte>(pointer + offset, estimatedChunkSize);
-            var lastNewline = span.LastIndexOf((byte)'\n');
-            var actualSize = lastNewline + 1;
+            var lastDelimiter = span.LastIndexOf(delimiter);
+            var actualSize = lastDelimiter + 1;
             chunks[i] = new MemoryMappedFileChunk(offset, actualSize, i);
             offset += actualSize;
         }

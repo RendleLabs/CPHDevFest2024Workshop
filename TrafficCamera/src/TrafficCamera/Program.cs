@@ -5,8 +5,7 @@ var stopwatch = Stopwatch.StartNew();
 
 var filePath = Path.GetFullPath(args[0]);
 
-var impl = new StreamImpl(filePath);
-// var impl = new MemoryMappedFileImpl(filePath);
+var impl = new ThreadedImpl(filePath);
 var t = impl.Run();
 
 if (!t.IsCompleted)
@@ -16,7 +15,9 @@ if (!t.IsCompleted)
 
 foreach (var (road, acc) in t.Result.OrderBy(p => p.Key))
 {
-    Console.WriteLine($"{road}: {acc.Slowest} [{acc.SlowestLicensePlate}] / {acc.Mean} / {acc.Fastest} [{acc.FastestLicensePlate}]");
+    var mean = ((float)acc.Total / acc.Count) / 10f;
+    Console.WriteLine(
+        $"{road}: {acc.Slowest / 10f:F1} [{acc.SlowestLicensePlate}] / {mean:F1} / {acc.Fastest / 10f:F1} [{acc.FastestLicensePlate}]");
 }
 
 stopwatch.Stop();
